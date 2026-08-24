@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ settings.site_name or '浦城仁爱流浪动物救助基地' }}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand"><span class="paw">🐾</span><span>{{ settings.site_name or '浦城仁爱流浪动物救助基地' }}</span></div>
+        <div class="nav-links"><a href="/" class="active">首页</a><a href="/donate">爱心捐助</a><a href="/about">关于我们</a></div>
+        <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+    </nav>
+    <div class="mobile-menu" id="mobileMenu"><a href="/">首页</a><a href="/donate">爱心捐助</a><a href="/about">关于我们</a></div>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>给流浪毛孩子一个温暖的家</h1>
+            <p class="hero-desc">{{ settings.description or '成立基地的目的是为了救助被遗弃或走失的猫狗，让流浪毛孩子得以远离饥寒病痛，拥有一个安稳栖息之所。' }}</p>
+            <div class="hero-stats"><div class="stat"><span class="stat-num">{{ dogs|length }}</span><span class="stat-label">待领养</span></div></div>
+            <div class="hero-actions"><a href="#dogs" class="btn btn-primary">看看待领养的狗狗</a><a href="/donate" class="btn btn-outline">支持我们</a></div>
+        </div>
+        <div class="hero-image"><div class="hero-placeholder">🏠🐕</div></div>
+    </section>
+    <section class="dogs-section" id="dogs">
+        <div class="section-header"><h2>等待领养的毛孩子</h2><p>每一只都渴望被爱，点击卡片了解详情</p></div>
+        {% if dogs %}<div class="dogs-grid">{% for dog in dogs %}<a href="/dog/{{ dog._id }}" class="dog-card"><div class="dog-photo">{% if dog.photo %}<img src="{{ dog.photo }}" alt="{{ dog.name }}" loading="lazy">{% else %}<div class="dog-photo-placeholder">🐕</div>{% endif %}<span class="dog-status {{ dog.status }}">{% if dog.status == 'available' %}待领养{% endif %}</span></div><div class="dog-info"><h3>{{ dog.name }}</h3><div class="dog-tags"><span class="tag">{{ dog.age or '未知年龄' }}</span><span class="tag">{{ dog.gender or '未知' }}</span>{% if dog.breed %}<span class="tag">{{ dog.breed }}</span>{% endif %}</div><p class="dog-personality">{{ dog.personality or '性格温顺，等待有缘人' }}</p></div></a>{% endfor %}</div>{% else %}<div class="empty-state"><div class="empty-icon">🐾</div><p>暂时没有待领养的狗狗，请关注我们的小红书/抖音获取最新信息</p></div>{% endif %}
+    </section>
+    <section class="contact-section"><div class="contact-card"><h3>想领养或捐助？</h3><p>欢迎通过以下方式联系我们</p><div class="contact-items">{% if settings.wechat %}<div class="contact-item"><span class="contact-icon">💬</span><span>微信：{{ settings.wechat }}</span></div>{% endif %}{% if settings.phone %}<div class="contact-item"><span class="contact-icon">📞</span><span>电话：{{ settings.phone }}</span></div>{% endif %}<div class="contact-item"><span class="contact-icon">📍</span><span>{{ settings.address or '福建省南平市浦城县' }}</span></div></div></div></section>
+    <footer class="footer"><p>浦城仁爱流浪动物救助基地 · 用爱终止流浪</p><p class="footer-small">所有款项100%用于毛孩子，欢迎监督</p></footer>
+    <script>function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('show');}</script>
+</body>
+</html>
