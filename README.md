@@ -10,13 +10,13 @@ pucheng-dog-rescue/           ← 项目根目录
 │
 ├── templates/                ← 网页模板
 │   ├── index.html            ← 首页（展示待领养狗狗）
-│   ├── dog_detail.html       ← 狗狗详情页
+│   ├── dog\_detail.html       ← 狗狗详情页
 │   ├── donate.html           ← 爱心捐助页
 │   ├── about.html            ← 关于我们页
 │   └── admin/
 │       ├── login.html        ← 管理员登录页
 │       ├── dashboard.html    ← 后台首页（狗狗列表）
-│       ├── dog_form.html     ← 添加/编辑狗狗表单
+│       ├── dog\_form.html     ← 添加/编辑狗狗表单
 │       └── settings.html     ← 基地设置页
 │
 ├── static/                   ← 静态文件
@@ -30,7 +30,7 @@ pucheng-dog-rescue/           ← 项目根目录
 └── README.md               ← 本文件（部署教程）
 ```
 
----
+\---
 
 ## 🚀 部署步骤（按顺序做）
 
@@ -44,9 +44,11 @@ pucheng-dog-rescue/           ← 项目根目录
 6. 在 Network Access 里，点击 **Add IP Address** → 选 **Allow Access from Anywhere**（0.0.0.0/0）
 7. 回到 Database → 点击 **Connect** → 选 **Drivers** → Python → 复制连接字符串
 8. 连接字符串长这样：
+
+```
+   mongodb+srv://用户名:密码@cluster0.xxxxx.mongodb.net/pucheng\_dogs?retryWrites=true\&w=majority
    ```
-   mongodb+srv://用户名:密码@cluster0.xxxxx.mongodb.net/pucheng_dogs?retryWrites=true&w=majority
-   ```
+
    把 `用户名` 和 `密码` 替换成你刚才创建的
 
 ### 第二步：注册 Vercel（网站托管）
@@ -59,8 +61,9 @@ pucheng-dog-rescue/           ← 项目根目录
 
 1. 在 GitHub 上创建一个新仓库（Repository），名字叫 `pucheng-dog-rescue`
 2. 把本项目的所有文件上传到这个仓库
-   - 可以直接在 GitHub 网页上逐个上传文件
-   - 或者用 Git 命令（如果你会用的话）
+
+   * 可以直接在 GitHub 网页上逐个上传文件
+   * 或者用 Git 命令（如果你会用的话）
 3. **重要**：确保文件结构和上面列的一致
 
 ### 第四步：在 Vercel 部署
@@ -69,29 +72,42 @@ pucheng-dog-rescue/           ← 项目根目录
 2. 选择你刚才创建的 GitHub 仓库 `pucheng-dog-rescue`
 3. 点击 **Import**
 4. 配置项目：
-   - Framework Preset: **Other**
-   - Root Directory: `./`（默认）
+
+   * Framework Preset: **Other**
+   * Root Directory: `./`（默认）
 5. 点击 **Environment Variables**，添加：
-   - Name: `MONGODB_URI`
-   - Value: 你第一步复制的 MongoDB 连接字符串
-   - 再添加一个：
-   - Name: `SECRET_KEY`
-   - Value: 随便写一串字母数字，比如 `pucheng2026abc123`
+
+   * 1\.
+   * Name: MONGODB\_URI
+   * Value: 你第一步复制的 MongoDB 连接字符串
+   * 
+   * 2\.
+   * Name: SECRET\_KEY
+   * Value: 一串足够长的随机字符串
+   * 
+   * 3\.
+   * Name: ADMIN\_USERNAME
+   * Value: admin
+   * 
+   * 4\.
+   * Name: ADMIN\_PASSWORD
+   * Value: 你自己设置的管理员密码
 6. 点击 **Deploy**
 7. 等待 1-2 分钟，部署完成后会显示一个网址，比如 `https://pucheng-dog-rescue.vercel.app`
 
 ### 第五步：访问后台
 
 1. 打开 `https://你的网址/admin`
-2. 用户名：`admin`
-3. 密码：`qiuge2026`
+2. 用户名：使用部署时设置的 `ADMIN\_USERNAME`（默认是 `admin`）
+3. 密码：使用部署时设置的 `ADMIN\_PASSWORD`
 4. 登录后可以：
-   - 添加/编辑/删除狗狗
-   - 修改基地信息（微信、电话、地址等）
-   - 上传微信群二维码
-   - 修改管理员密码
 
----
+   * 添加/编辑/删除狗狗
+   * 修改基地信息（微信、电话、地址等）
+   * 上传微信群二维码
+   * 修改管理员密码
+
+\---
 
 ## 📝 叔叔如何使用
 
@@ -101,11 +117,12 @@ pucheng-dog-rescue/           ← 项目根目录
 2. 用密码登录
 3. 点击右上角 **"+ 添加新狗狗"**
 4. 填写：
-   - 名字（必填）
-   - 年龄、性别、品种
-   - 性格特点、健康状况
-   - 它的故事（可选）
-   - 上传照片（点击"选择照片"）
+
+   * 名字（必填）
+   * 年龄、性别、品种
+   * 性格特点、健康状况
+   * 它的故事（可选）
+   * 上传照片（点击"选择照片"）
 5. 点击 **"保存"**
 6. 回到首页就能看到这只狗狗了
 
@@ -123,7 +140,7 @@ pucheng-dog-rescue/           ← 项目根目录
 3. 把"状态"改成 **"已领养"**
 4. 保存后，首页就不会再显示了
 
----
+\---
 
 ## 🔧 常见问题
 
@@ -139,19 +156,21 @@ A: Vercel 免费版服务器在国外，国内访问可能稍慢。如果在意�
 **Q: 想换密码？**
 A: 在后台"基地设置"页面最下面，可以修改管理员密码。
 
----
+\---
 
 ## 💡 给叔叔的小红书/抖音引流建议
 
 叔叔发视频/图文时，在文案最后加一句：
 
-> "更多待领养的毛孩子请看主页链接 👉 [你的网站地址]"
+> "更多待领养的毛孩子请看主页链接 👉 \[你的网站地址]"
 
 把网站地址放在：
-- 小红书：主页简介（放链接）
-- 抖音：主页简介或评论区置顶
 
----
+* 小红书：主页简介（放链接）
+* 抖音：主页简介或评论区置顶
+
+\---
 
 **技术栈**：Python + Flask + MongoDB + Vercel
 **制作日期**：2026年8月
+
