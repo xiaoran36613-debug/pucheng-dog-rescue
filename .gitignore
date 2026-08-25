@@ -2,13 +2,14 @@
 __pycache__/
 *.py[cod]
 *.pyo
+*.so
 
 # Virtual environment
 .venv/
 venv/
 env/
 
-# Secrets
+# Environment / secrets
 .env
 .env.*
 !.env.example
