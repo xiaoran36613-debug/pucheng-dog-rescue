@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ '编辑' if dog else '添加' }}狗狗 - 浦城仁爱流浪动物救助基地</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <span>🐾</span>
+                <span>救助基地后台</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin">📋 狗狗管理</a>
+                <a href="/admin/settings">⚙️ 基地设置</a>
+                <a href="/admin/logout">🚪 退出登录</a>
+            </nav>
+        </aside>
+
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>{{ '编辑' if dog else '添加' }}狗狗信息</h1>
+                <a href="/admin" class="btn btn-outline">← 返回列表</a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" enctype="multipart/form-data" class="dog-form">
+                <div class="form-grid">
+                    <!-- 左侧：基本信息 -->
+                    <div class="form-section">
+                        <h3>基本信息</h3>
+
+                        <div class="form-group">
+                            <label>名字 <span class="required">*</span></label>
+                            <input type="text" name="name" value="{{ dog.name if dog else '' }}" placeholder="例如：豆豆" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>年龄</label>
+                                <input type="text" name="age" value="{{ dog.age if dog else '' }}" placeholder="例如：2岁 / 3个月">
+                            </div>
+                            <div class="form-group">
+                                <label>性别</label>
+                                <select name="gender">
+                                    <option value="">请选择</option>
+                                    <option value="公" {{ 'selected' if dog and dog.gender == '公' else '' }}>公</option>
+                                    <option value="母" {{ 'selected' if dog and dog.gender == '母' else '' }}>母</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>品种</label>
+                            <input type="text" name="breed" value="{{ dog.breed if dog else '' }}" placeholder="例如：田园犬 / 串串">
+                        </div>
+
+                        <div class="form-group">
+                            <label>状态</label>
+                            <select name="status">
+                                <option value="available" {{ 'selected' if dog and dog.status == 'available' else '' }}>待领养</option>
+                                <option value="pending" {{ 'selected' if dog and dog.status == 'pending' else '' }}>领养中</option>
+                                <option value="adopted" {{ 'selected' if dog and dog.status == 'adopted' else '' }}>已领养</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：照片 -->
+                    <div class="form-section">
+                        <h3>照片</h3>
+                        <div class="photo-upload">
+                            {% if dog and dog.photo %}
+                            <img src="{{ dog.photo }}" class="photo-preview" id="photoPreview">
+                            {% else %}
+                            <div class="photo-placeholder" id="photoPreview">
+                                <span>🐕</span>
+                                <p>点击上传照片</p>
+                            </div>
+                            {% endif %}
+                            <input type="file" name="photo" id="photoInput" accept="image/*" onchange="previewPhoto(this)">
+                            <label for="photoInput" class="btn btn-upload">选择照片</label>
+                            <p class="upload-hint">支持 JPG、PNG 格式，建议清晰正面照</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 详细信息 -->
+                <div class="form-section full-width">
+                    <h3>详细信息</h3>
+
+                    <div class="form-group">
+                        <label>性格特点</label>
+                        <textarea name="personality" rows="3" placeholder="例如：温顺亲人，喜欢和人互动，不乱叫">{{ dog.personality if dog else '' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>健康状况</label>
+                        <textarea name="health" rows="3" placeholder="例如：已接种疫苗、已驱虫、身体健康">{{ dog.health if dog else '' }}</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>它的故事（可选）</label>
+                        <textarea name="story" rows="4" placeholder="这只狗狗的来历、经历等，写得感人一些更容易被领养">{{ dog.story if dog else '' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-large">💾 保存</button>
+                    <a href="/admin" class="btn btn-outline btn-large">取消</a>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        function previewPhoto(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var preview = document.getElementById('photoPreview');
+                    preview.outerHTML = '<img src="' + e.target.result + '" class="photo-preview" id="photoPreview">';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

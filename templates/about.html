@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 浦城仁爱流浪动物救助基地</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="paw">🐾</span>
+            <span>{{ settings.site_name or '浦城仁爱流浪动物救助基地' }}</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">首页</a>
+            <a href="/donate">爱心捐助</a>
+            <a href="/about" class="active">关于我们</a>
+        </div>
+        <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/">首页</a>
+        <a href="/donate">爱心捐助</a>
+        <a href="/about">关于我们</a>
+    </div>
+
+    <main class="page-content">
+        <div class="page-header">
+            <h1>关于我们</h1>
+        </div>
+
+        <div class="about-container">
+            <div class="about-section">
+                <h2>我们的初心</h2>
+                <p>{{ settings.about or '愿善意传递不息，人间温情长存，欢迎更多爱心人士加入，共同守护世间每一只可爱的小生命！' }}</p>
+            </div>
+
+            <div class="about-section">
+                <h2>基地信息</h2>
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="info-label">📍 地址</span>
+                        <span class="info-value">{{ settings.address or '福建省南平市浦城县' }}</span>
+                    </div>
+                    {% if settings.wechat %}
+                    <div class="info-item">
+                        <span class="info-label">💬 微信</span>
+                        <span class="info-value">{{ settings.wechat }}</span>
+                    </div>
+                    {% endif %}
+                    {% if settings.phone %}
+                    <div class="info-item">
+                        <span class="info-label">📞 电话</span>
+                        <span class="info-value">{{ settings.phone }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="about-section">
+                <h2>关注我们</h2>
+                <p>欢迎关注我们的社交媒体，了解基地最新动态</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">📕 小红书</a>
+                    <a href="#" class="social-link">🎵 抖音</a>
+                    <a href="#" class="social-link">💬 微信公众号</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>浦城仁爱流浪动物救助基地 · 用爱终止流浪</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

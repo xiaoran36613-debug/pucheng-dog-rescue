@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>爱心捐助 - 浦城仁爱流浪动物救助基地</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="paw">🐾</span>
+            <span>{{ settings.site_name or '浦城仁爱流浪动物救助基地' }}</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">首页</a>
+            <a href="/donate" class="active">爱心捐助</a>
+            <a href="/about">关于我们</a>
+        </div>
+        <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/">首页</a>
+        <a href="/donate">爱心捐助</a>
+        <a href="/about">关于我们</a>
+    </div>
+
+    <main class="page-content">
+        <div class="page-header">
+            <h1>爱心捐助</h1>
+            <p>您的一份爱心，是它们活下去的希望</p>
+        </div>
+
+        <div class="donate-container">
+            <div class="donate-card">
+                <div class="donate-icon">💝</div>
+                <h2>捐助方式</h2>
+                <p class="donate-desc">{{ settings.donation_note or '目前基地通过微信群接受爱心捐助，所有款项100%用于毛孩子的食物、医疗和日常照料。欢迎加入我们的救助群，共同监督。' }}</p>
+
+                {% if settings.donation_qr %}
+                <div class="qr-section">
+                    <p>扫码加入救助群</p>
+                    <img src="{{ settings.donation_qr }}" alt="救助群二维码" class="qr-code">
+                </div>
+                {% endif %}
+
+                <div class="donate-contact">
+                    <h3>联系方式</h3>
+                    {% if settings.wechat %}
+                    <p>💬 微信：{{ settings.wechat }}</p>
+                    {% endif %}
+                    {% if settings.phone %}
+                    <p>📞 电话：{{ settings.phone }}</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="donate-info">
+                <h3>您的爱心将用于</h3>
+                <div class="use-list">
+                    <div class="use-item">
+                        <span class="use-icon">🍖</span>
+                        <span>每日狗粮和食物</span>
+                    </div>
+                    <div class="use-item">
+                        <span class="use-icon">💉</span>
+                        <span>疫苗接种和驱虫</span>
+                    </div>
+                    <div class="use-item">
+                        <span class="use-icon">🏥</span>
+                        <span>伤病治疗</span>
+                    </div>
+                    <div class="use-item">
+                        <span class="use-icon">🏠</span>
+                        <span>基地日常运营</span>
+                    </div>
+                </div>
+
+                <div class="transparency-note">
+                    <h4>💡 透明承诺</h4>
+                    <p>我们有专人负责爱心资金管理，每一项收支都会公布，确保每一分钱都花在毛孩子身上，不辜负爱心人士的信任！</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>浦城仁爱流浪动物救助基地 · 用爱终止流浪</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>后台管理 - 浦城仁爱流浪动物救助基地</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin-body">
+    <div class="admin-layout">
+        <!-- 侧边栏 -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <span>🐾</span>
+                <span>救助基地后台</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/admin" class="active">📋 狗狗管理</a>
+                <a href="/admin/settings">⚙️ 基地设置</a>
+                <a href="/admin/logout">🚪 退出登录</a>
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>狗狗管理</h1>
+                <a href="/admin/dog/add" class="btn btn-primary">+ 添加新狗狗</a>
+            </div>
+
+            <!-- 统计卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">{{ stats.total }}</span>
+                    <span class="stat-label">总记录</span>
+                </div>
+                <div class="stat-card available">
+                    <span class="stat-number">{{ stats.available }}</span>
+                    <span class="stat-label">待领养</span>
+                </div>
+                <div class="stat-card adopted">
+                    <span class="stat-number">{{ stats.adopted }}</span>
+                    <span class="stat-label">已领养</span>
+                </div>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <!-- 狗狗列表 -->
+            <div class="admin-table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>照片</th>
+                            <th>名字</th>
+                            <th>年龄</th>
+                            <th>性别</th>
+                            <th>状态</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for dog in dogs %}
+                        <tr>
+                            <td>
+                                {% if dog.photo %}
+                                <img src="{{ dog.photo }}" class="table-photo" alt="{{ dog.name }}">
+                                {% else %}
+                                <div class="table-photo-placeholder">🐕</div>
+                                {% endif %}
+                            </td>
+                            <td><strong>{{ dog.name }}</strong></td>
+                            <td>{{ dog.age or '-' }}</td>
+                            <td>{{ dog.gender or '-' }}</td>
+                            <td>
+                                {% if dog.status == 'available' %}
+                                <span class="badge badge-green">待领养</span>
+                                {% elif dog.status == 'adopted' %}
+                                <span class="badge badge-gray">已领养</span>
+                                {% else %}
+                                <span class="badge badge-yellow">领养中</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ dog.createdAt.strftime('%Y-%m-%d') if dog.createdAt else '-' }}</td>
+                            <td class="table-actions">
+                                <a href="/admin/dog/edit/{{ dog._id }}" class="btn btn-small btn-edit">编辑</a>
+                                <form method="POST" action="/admin/dog/delete/{{ dog._id }}" style="display:inline;" onsubmit="return confirm('确定要删除 {{ dog.name }} 吗？');">
+                                    <button type="submit" class="btn btn-small btn-delete">删除</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="empty-row">还没有添加狗狗，点击右上角"添加新狗狗"开始</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

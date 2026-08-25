@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dog.name }} - 浦城仁爱流浪动物救助基地</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="paw">🐾</span>
+            <span>{{ settings.site_name or '浦城仁爱流浪动物救助基地' }}</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">首页</a>
+            <a href="/donate">爱心捐助</a>
+            <a href="/about">关于我们</a>
+        </div>
+        <div class="nav-toggle" onclick="toggleMenu()">☰</div>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="/">首页</a>
+        <a href="/donate">爱心捐助</a>
+        <a href="/about">关于我们</a>
+    </div>
+
+    <main class="dog-detail-page">
+        <!-- 返回按钮 -->
+        <a href="/" class="back-link">← 返回首页</a>
+
+        <div class="dog-detail-container">
+            <!-- 左侧照片 -->
+            <div class="dog-detail-photo">
+                {% if dog.photo %}
+                <img src="{{ dog.photo }}" alt="{{ dog.name }}">
+                {% else %}
+                <div class="dog-photo-placeholder large">🐕</div>
+                {% endif %}
+            </div>
+
+            <!-- 右侧信息 -->
+            <div class="dog-detail-info">
+                <div class="dog-detail-header">
+                    <h1>{{ dog.name }}</h1>
+                    <span class="status-badge {{ dog.status }}">
+                        {% if dog.status == 'available' %}待领养{% endif %}
+                    </span>
+                </div>
+
+                <div class="detail-tags">
+                    <div class="detail-tag">
+                        <span class="tag-label">年龄</span>
+                        <span class="tag-value">{{ dog.age or '未知' }}</span>
+                    </div>
+                    <div class="detail-tag">
+                        <span class="tag-label">性别</span>
+                        <span class="tag-value">{{ dog.gender or '未知' }}</span>
+                    </div>
+                    <div class="detail-tag">
+                        <span class="tag-label">品种</span>
+                        <span class="tag-value">{{ dog.breed or '田园犬/串串' }}</span>
+                    </div>
+                </div>
+
+                {% if dog.personality %}
+                <div class="detail-section">
+                    <h3>性格特点</h3>
+                    <p>{{ dog.personality }}</p>
+                </div>
+                {% endif %}
+
+                {% if dog.health %}
+                <div class="detail-section">
+                    <h3>健康状况</h3>
+                    <p>{{ dog.health }}</p>
+                </div>
+                {% endif %}
+
+                {% if dog.story %}
+                <div class="detail-section">
+                    <h3>它的故事</h3>
+                    <p>{{ dog.story }}</p>
+                </div>
+                {% endif %}
+
+                <div class="detail-contact">
+                    <h3>想带它回家？</h3>
+                    <p>请联系基地了解领养流程</p>
+                    <div class="contact-buttons">
+                        {% if settings.wechat %}
+                        <a href="weixin://" class="btn btn-wechat">💬 加微信：{{ settings.wechat }}</a>
+                        {% endif %}
+                        {% if settings.phone %}
+                        <a href="tel:{{ settings.phone }}" class="btn btn-phone">📞 打电话：{{ settings.phone }}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 其他狗狗推荐 -->
+        {% if other_dogs %}
+        <section class="other-dogs">
+            <h2>其他待领养的毛孩子</h2>
+            <div class="dogs-grid small">
+                {% for d in other_dogs %}
+                <a href="/dog/{{ d._id }}" class="dog-card">
+                    <div class="dog-photo">
+                        {% if d.photo %}
+                        <img src="{{ d.photo }}" alt="{{ d.name }}" loading="lazy">
+                        {% else %}
+                        <div class="dog-photo-placeholder">🐕</div>
+                        {% endif %}
+                    </div>
+                    <div class="dog-info">
+                        <h3>{{ d.name }}</h3>
+                        <div class="dog-tags">
+                            <span class="tag">{{ d.age or '未知' }}</span>
+                            <span class="tag">{{ d.gender or '未知' }}</span>
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer class="footer">
+        <p>浦城仁爱流浪动物救助基地 · 用爱终止流浪</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById('mobileMenu').classList.toggle('show');
+        }
+    </script>
+</body>
+</html>
