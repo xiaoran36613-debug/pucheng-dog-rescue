@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, redirect, url_for, session, flash
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import os
 import base64
@@ -33,7 +32,6 @@ client = MongoClient(
 db = client.get_default_database()
 dogs_collection = db.dogs
 settings_collection = db.settings
-admin_collection = db.admin
 
 
 def initialize_database():
@@ -136,18 +134,21 @@ def api_dog(dog_id):
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
+    expected_password = os.environ.get('ADMIN_PASSWORD')
+
+    if not expected_password:
+        if request.method == 'POST':
+            flash('服务器尚未配置管理员密码，请检查 Vercel 的 ADMIN_PASSWORD。', 'error')
+        return render_template('admin/login.html')
+
     if request.method == 'POST':
         username = request.form.get('username', '').strip()
         password = request.form.get('password', '')
-        expected_username = os.environ.get('ADMIN_USERNAME', 'admin')
-        expected_password = os.environ.get('ADMIN_PASSWORD')
 
-        if not expected_password:
-            raise RuntimeError('ADMIN_PASSWORD environment variable is required')
-
-        if username == expected_username and password == expected_password:
+        # 管理员用户名固定为 admin，密码只从 Vercel Production 环境变量读取。
+        if username == 'admin' and password == expected_password:
             session['admin_logged_in'] = True
-            session['admin_username'] = username
+            session['admin_username'] = 'admin'
             return redirect(url_for('admin_dashboard'))
 
         flash('用户名或密码错误', 'error')
@@ -236,25 +237,6 @@ def admin_settings():
         flash('设置已保存', 'success')
         return redirect(url_for('admin_settings'))
     return render_template('admin/settings.html', settings=settings)
-
-
-@app.route('/admin/change-password', methods=['POST'])
-@login_required
-def admin_change_password():
-    current = request.form.get('current_password', '')
-    new_password = request.form.get('new_password', '')
-    confirm = request.form.get('confirm_password', '')
-    admin = admin_collection.find_one({'username': session.get('admin_username')})
-    if not admin or not check_password_hash(admin['password'], current):
-        flash('当前密码错误', 'error')
-    elif new_password != confirm:
-        flash('两次输入的新密码不一致', 'error')
-    elif len(new_password) < 6:
-        flash('新密码至少6位', 'error')
-    else:
-        admin_collection.update_one({'username': session.get('admin_username')}, {'$set': {'password': generate_password_hash(new_password)}})
-        flash('密码修改成功', 'success')
-    return redirect(url_for('admin_settings'))
 
 
 if __name__ == '__main__':
